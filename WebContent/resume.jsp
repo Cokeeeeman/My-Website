@@ -12,13 +12,24 @@
 		<p><b>IDEs and Tools :</b> Eclipse, Sublime, MySQL, Bash, GitHub, BitBucket, Heroku, Cloud9</p>
 
 		<h3>Certifications</h3><hr>
-		<p><b>Oracle Certified Professional, Java SE6 Programmer</b></p>
+		<p><span class="glyphicon glyphicon-certificate"></span> Oracle Certified Professional, Java SE6 Programmer</p>
 
 		<h3>Projects</h3><hr>
-		<h4>Property Management System</h4>
-		<h4>Web Forum</h4>
-		<h4>Web Search Engine</h4>
-		<h4>Tank War</h4>
+		<h4><span class="glyphicon glyphicon-wrench"></span> Property Management System</h4>
+		<p> - Implemented a simple system in Rails which is able to manage resources like rooms and guests;</p>
+		    
+		
+		<h4><span class="glyphicon glyphicon-wrench"></span> Web Forum</h4>
+		<p> - Designed and implemented a small forum in Java which is able to perform basic operations like post, reply, delete, modify and search keywords;<br>
+		    - Utilized Java Bean, JSP, JDBC, Apache Tomcat v7.0, and CKEditor.</p>
+		
+		<h4><span class="glyphicon glyphicon-wrench"></span> Web Search Engine</h4>
+		<p> - Implemented a simple search engine in Java; <br>
+		    - Crawled the ics.uci.edu domain with Crawler4j, an open source library;  <br>
+		    - Applied TF-IDF, NDCG, cosine distance, anchor text to optimize and evaluate searching performance;</p>
+		
+		<h4><span class="glyphicon glyphicon-wrench"></span> Tank War</h4>
+		<p> - Implemented a tank shooting game in Java imitating the classic game Battle City.</p>
 
 		<h3>Education</h3><hr>
 		<h4>University of California, Irvine, USA (Sept.2013 - Mar.2015)</h4>
