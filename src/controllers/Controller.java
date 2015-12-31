@@ -64,11 +64,12 @@ public class Controller extends HttpServlet {
 		
 		try {
 			String user_name = "root";
-			//String user_password = "VFEfpv16481";
-			String user_password = "root"; //local server
 			
-			//String URL =  "jdbc:mysql://node5354-ziyuechen.pai.ontopcorp.com/mywebsite";
-			String URL =  "jdbc:mysql://localhost:3306/mywebsite";
+			String user_password = "VFEfpv16481";
+			String URL =  "jdbc:mysql://node5354-ziyuechen.pai.ontopcorp.com/mywebsite";
+			
+			//String user_password = "root"; //local server
+			//String URL =  "jdbc:mysql://localhost:3306/mywebsite";
 			conn = (Connection)DriverManager.getConnection(URL, user_name, user_password);
 			 
 		} catch (SQLException e) {

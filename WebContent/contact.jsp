@@ -104,11 +104,10 @@ $(document).ready(function() {
 	               					$(".modal-body").append('<p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Don' + "'t you wanna make a comment? </p>");
 	               				}
 	               				
-	               				$("#myModal").modal();
-	               				
-	               				$(".modal-header button").click(function() {
+	               				$("#myModal").modal({keyboard: false});
+	               				$('#myModal').on('hidden.bs.modal', function () {
 	               					$(".modal-body p").remove();
-	               				});
+	               				})
 	               				
 	               				
 	               			} else {
@@ -116,10 +115,10 @@ $(document).ready(function() {
 	               				$(".modal-content").addClass("alert-success");
 	               				$(".modal-header h4").html("Congratulations!");
 	               				$(".modal-body").append('<p><span class="glyphicon glyphicon-check"></span> Your message has been sent!</p>');
-	               				$("#myModal").modal();
-	               				$(".modal-header button").click(function() {
+	               				$("#myModal").modal({keyboard: false});
+	               				$('#myModal').on('hidden.bs.modal', function () {
 	               					$(".modal-body p").remove();
-	               				});
+	               				})
 	               			}
 	          			  }		
 		});
