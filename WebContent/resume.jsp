@@ -4,8 +4,8 @@
 <c:param name="title" value="Resume | Ziyue's Website"></c:param>
 </c:import>
 
-<div class="container-fluid bg-body">
-	<h1 class="text-center">RESUME</h1>
+<div class="container-fluid bg-body text-center">
+	<h1>RESUME</h1>
 	<div class="resume">
 		<h3>Skills</h3><hr>
 		<p><b>Programming Languages : </b> Java, JSP, JSTL, HTML, CSS, Javascript, JQuery, PHP, Ruby on Rails, SQL</p>

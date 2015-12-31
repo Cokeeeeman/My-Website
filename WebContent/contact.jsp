@@ -26,13 +26,13 @@ String comments = request.getAttribute("comments") == null ? "" : (String)reques
    			<input type="hidden" name="action" value="message">
       		<div class="row">
         		<div class="col-sm-6 form-group">
-          			<input class="form-control" id="name" name="name" placeholder="Name" type="text" value="<%=name %>" required>
+          			<input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
         		</div>
         		<div class="col-sm-6 form-group">
-          			<input class="form-control" id="email" name="email" placeholder="Email" type="email" value="<%=email %>" required>
+          			<input class="form-control" id="email" name="email" placeholder="Email" type="email"  required>
         		</div>
       		</div>
-      		<textarea class="form-control" id="comments" name="comments" placeholder="Comment" rows="5" value="<%=comments %>"></textarea><br>
+      		<textarea class="form-control" id="comments" name="comments" placeholder="Comment" rows="5"></textarea><br>
       		<div class="row">
         		<div class="col-sm-12 form-group">
           			<button class="btn btn-default pull-right" type="submit">Send</button>
@@ -41,18 +41,97 @@ String comments = request.getAttribute("comments") == null ? "" : (String)reques
       		</form> 
     	</div>
   	</div>
+  	
 	
 </div>
 
-<% String msg = (String)request.getAttribute("succeed"); %>
-<% if(msg!=null && msg.equals("true")) { %>
-<div class="alert alert-success">
-  	Your message has been successfully submitted!
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div> -->
+    </div>
+
+  </div>
 </div>
-<% } else { %>
-<div class="alert alert-danger">
-  	Message submission failed!
-</div>
-<% }  %>
+
+<script>
+$(document).ready(function() {
+	
+	$("form").submit(function(event) {
+		var formData = {
+				'action'	: $('input[name=action]').val(),
+				'name'		: $('input[name=name]').val(),
+				'email'		: $('input[name=email]').val(),
+				'comments'	: $('textarea[name=comments]').val()
+		};
+		
+		var contextPath = "${pageContext.request.contextPath}";
+		
+		$.ajax({
+			type		: 'post',
+			url			: contextPath + '/message_center',
+			data		: formData,
+			dataType	: 'json',
+			success		: function(data) {
+				
+	               			if(!data.success) {
+	               				$(".modal-content").removeClass("alert-success");
+	               				$(".modal-content").addClass("alert-danger");
+	               				
+	               				$(".modal-header h4").html("Oops!");
+	               				
+	               				if(data.emptyName) {
+	               					$(".modal-body").append('<p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Do you mind telling me your name? </p>');
+	               				}
+	               				
+	               				if(data.emptyEmail) {
+	               					$(".modal-body").append('<p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Please leave me your email so I can reach back to you. </p>');
+	               				}
+	               				
+	               				if(data.emptyComments) {
+	               					$(".modal-body").append('<p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Don' + "'t you wanna make a comment? </p>");
+	               				}
+	               				
+	               				$("#myModal").modal();
+	               				
+	               				$(".modal-header button").click(function() {
+	               					$(".modal-body p").remove();
+	               				});
+	               				
+	               				
+	               			} else {
+	               				$(".modal-content").removeClass("alert-danger");
+	               				$(".modal-content").addClass("alert-success");
+	               				$(".modal-header h4").html("Congratulations!");
+	               				$(".modal-body").append('<p><span class="glyphicon glyphicon-check"></span> Your message has been sent!</p>');
+	               				$("#myModal").modal();
+	               				$(".modal-header button").click(function() {
+	               					$(".modal-body p").remove();
+	               				});
+	               			}
+	          			  }		
+		});
+		
+		event.preventDefault();
+		
+	});
+	
+});
+
+</script>
+
+
 
 <c:import url="_footer.jsp"></c:import>

@@ -12,7 +12,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.mysql.jdbc.Connection;
+
 
 /**
  * Servlet implementation class Controller
@@ -40,24 +44,42 @@ public class Controller extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		JSONObject json = new JSONObject();
 		PrintWriter pw = response.getWriter();
-		request.setAttribute("msg", "");
+		
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e) {
-			pw.println("Can't load database driver!");
+			try {
+				json.put("success", false);
+				json.put("msg", "Failed to load MySQL Driver!");
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		
 		Connection conn = null;
 		
 		try {
-			conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/mywebsite", "root", "root");
+			String user_name = "root";
+			//String user_password = "VFEfpv16481";
+			String user_password = "root"; //local server
+			
+			//String URL =  "jdbc:mysql://node5354-ziyuechen.pai.ontopcorp.com/mywebsite";
+			String URL =  "jdbc:mysql://localhost:3306/mywebsite";
+			conn = (Connection)DriverManager.getConnection(URL, user_name, user_password);
+			 
 		} catch (SQLException e) {
-			pw.println("Can't connect to the database!");
+			try {
+				json.put("success", false);
+				json.put("msg", "Failed to connect to the database!");
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
-		
-		pw.println("Connected to the database!");
 		
 		String action = request.getParameter("action");
 		if(action==null) {
@@ -67,27 +89,52 @@ public class Controller extends HttpServlet {
 			String email = request.getParameter("email");
 			String comments = request.getParameter("comments");
 			
-			String sql = "insert into message (name, email, comments) values (?, ?, ?)";
-			PreparedStatement stmt;
-			
 			try {
-				stmt = conn.prepareStatement(sql);
+				if(name==null || name.trim().length()==0) {
+					json.put("emptyName", true);
+				} else {
+					json.put("emptyName", false);
+				}
 				
-				stmt.setString(1, name);
-				stmt.setString(2, email);
-				stmt.setString(3, comments);
+				if(email==null || email.trim().length()==0) {
+					json.put("emptyEmail", true);
+				} else {
+					json.put("emptyEmail", false);
+				}
 				
-				stmt.executeUpdate();
-				stmt.close();
+				if(comments==null || comments.trim().length()==0) {
+					json.put("emptyComments", true);
+				} else {
+					json.put("emptyComments", false);
+				}
 				
-				request.setAttribute("name", name);
-				request.setAttribute("email", email);
-				request.setAttribute("comments", comments);
-				request.setAttribute("succeed", "true");
-				request.getRequestDispatcher("/contact.jsp").forward(request, response);
+				if(json.getBoolean("emptyName") || json.getBoolean("emptyEmail") 
+						|| json.getBoolean("emptyComments")) {
+					
+					json.put("success", false);
+					
+				} else {
+					String sql = "insert into message (name, email, comments) values (?, ?, ?)";
+					PreparedStatement stmt = conn.prepareStatement(sql);
+					
+					stmt.setString(1, name);
+					stmt.setString(2, email);
+					stmt.setString(3, comments);
+					
+					stmt.executeUpdate();
+					stmt.close();
+					
+					json.put("success", true);
+				}
+				 
+				
+				pw.print(json.toString());
 			} catch (SQLException e) {
 				
 				e.printStackTrace();
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			
 		}
