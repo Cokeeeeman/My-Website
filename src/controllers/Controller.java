@@ -65,11 +65,11 @@ public class Controller extends HttpServlet {
 		try {
 			String user_name = "root";
 			
-			String user_password = "VFEfpv16481";
-			String URL =  "jdbc:mysql://node5354-ziyuechen.pai.ontopcorp.com/mywebsite";
+//			String user_password = "VFEfpv16481";
+//			String URL =  "jdbc:mysql://node5354-ziyuechen.pai.ontopcorp.com/mywebsite";
 			
-			//String user_password = "root"; //local server
-			//String URL =  "jdbc:mysql://localhost:3306/mywebsite";
+			String user_password = "root"; //local server
+			String URL =  "jdbc:mysql://localhost:3306/mywebsite";
 			conn = (Connection)DriverManager.getConnection(URL, user_name, user_password);
 			 
 		} catch (SQLException e) {
@@ -115,12 +115,16 @@ public class Controller extends HttpServlet {
 					json.put("success", false);
 					
 				} else {
-					String sql = "insert into message (name, email, comments) values (?, ?, ?)";
+					java.util.Date uDate = new java.util.Date();
+					java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+
+					String sql = "insert into message (name, email, comments, date) values (?, ?, ?, ?)";
 					PreparedStatement stmt = conn.prepareStatement(sql);
 					
 					stmt.setString(1, name);
 					stmt.setString(2, email);
 					stmt.setString(3, comments);
+					stmt.setString(4, sDate.toString());
 					
 					stmt.executeUpdate();
 					stmt.close();
@@ -137,6 +141,26 @@ public class Controller extends HttpServlet {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			
+		} else if(action.equals("delete")) {
+			String id = request.getParameter("msg_id");
+			
+			
+			String sql = "delete from message where idmessage=" + id;
+			System.out.println(sql);
+			
+			PreparedStatement stmt;
+			
+			try {
+				stmt = conn.prepareStatement(sql);
+				stmt.executeUpdate();
+				stmt.close();
+				
+				request.getRequestDispatcher("/secret_path.jsp").forward(request, response);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 			
 		}
 	}
